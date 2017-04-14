@@ -1,0 +1,934 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.21-DEV">
+    <title>Безболезненное разрешение Merge конфликтов в Git</title>
+    <meta name="author" content="Vladimir Bauer">
+    <meta name="keywords" content="development">
+
+    <link rel="icon" href="https://vbauerster.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="Мой вольный перевод статьи Painless merge conflict resolution in Git.
+">
+    <meta property="og:description" content="Мой вольный перевод статьи Painless merge conflict resolution in Git.
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Безболезненное разрешение Merge конфликтов в Git">
+    <meta property="og:url" content="/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/">
+    <meta property="og:site_name" content="Vladimir&#39;s blog">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Vladimir&#39;s blog">
+    <meta name="twitter:description" content="Мой вольный перевод статьи Painless merge conflict resolution in Git.
+">
+    
+      <meta name="twitter:creator" content="@vbauerster">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://avatars1.githubusercontent.com/u/2206533">
+    
+
+    
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="https://vbauerster.github.io/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+
+    
+      
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-97428842-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://vbauerster.github.io/">Vladimir&#39;s blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://vbauerster.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://avatars1.githubusercontent.com/u/2206533" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://vbauerster.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://avatars1.githubusercontent.com/u/2206533" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Vladimir Bauer</h4>
+        
+          <h5 class="sidebar-profile-bio">Blogger &middot; Programmer &middot; Gopher</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1351845/vladimir-bauer" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/vbauerster" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://vbauerster.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Безболезненное разрешение Merge конфликтов в Git
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2017-04-14T00:00:00Z">
+      
+  
+  
+  
+  
+    14 April 2017
+  
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://vbauerster.github.io/categories/development">development</a>, 
+    
+      <a class="category-link" href="https://vbauerster.github.io/categories/translation">translation</a>
+    
+  
+
+
+</div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Мой вольный перевод статьи <a href="http://blog.wuwon.id.au/2010/09/painless-merge-conflict-resolution-in.html">Painless merge conflict resolution in Git</a>.
+</p>
+
+<p>В моей повседневной работе, часто приходится иметь дело со множеством git ветвей (branch). Это могут быть ветви промежуточных релизов, ветви с устаревшим API находящиеся на поддержке для некоторых клиентов, или ветви с экспериментальными свойствами. Лёгкость создания ветвей в модели Git так и соблазняет разработчиков создавать все больше и больше ветвей, и как правило бремя от большого количества ветвей становится очень ощутимым, когда приходится все эти ветви поддерживать и периодически делать слияния (merge) с другими ветвями.</p>
+
+<p>Слияния очень важны для поддержания кода в актуальном состоянии, и как правило ошибка сделанная при слиянии может привести к большей головной боли, нежели ошибка сделанная при простом коммите. К сожалению ошибки слияния далеко не редкость, потому что во-первых слияния имеют несколько родительских ветвей. Даже при анализе истории слияния ветвей, бывает очень трудно понять, какие же изменения были сделаны для разрешения конфликта. Во-вторых, <a href="http://www.kernel.org/pub/software/scm/git/docs/howto/revert-a-faulty-merge.txt">отмена неудачного слияния</a> может превратиться в большую головную боль. В-третьих, большая часть конфликтов слияния происходит при работе с чужим кодом, потому что само понятие ветвей подразумевает множество пользователей, т.е. далеко не всегда слияние производит тот же человек который работал с той или иной веткой. В сухом остатке, сделать ошибку при слиянии очень легко, её трудно исправить и трудно найти. Таким образом время потраченное на изучение и понимание процесса слияния ветвей, окупится с лихвой.</p>
+
+<p>Удивительно, но я обнаружил, что многие доступные инструменты и интерфейсы предназначенные для выполнения слияний, не достаточно хорошо оснащены для эффективного выполнения этого процесса. Часто программист просто надеется что команда git merge сделает за него всю работу. Но когда все-таки происходит конфликт, то обычно стратегия слияния заключается в беглом просмотре кода вокруг строки конфликта, и интуитивном угадывании что именно данный кусок кода предпочтительней другого.</p>
+
+<p>В данной статье я надеюсь продемонстрировать что процесс разрешения конфликтов может быть пошагово точным, при котором отпадает необходимость что-либо там угадывать.</p>
+
+<h2 id="голубые-розы-roses-are-blue">Голубые Розы (Roses are Blue)</h2>
+
+<p>Давайте предположим что вашей команде поручили писать поэмы в отведённом для этих целей репозитории. (Какой кошмар!) А вам доверили самое главное - делать слияния последних фиксов из ветки master в ветку beta. Итак, вы переключаетесь в ветку beta и выполняете следующую команду:</p>
+
+<pre><code class="language-sh">$ git merge master
+Auto-merging roses.txt
+CONFLICT (content): Merge conflict in roses.txt
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+
+<p>Ого, это конфликт. Вы решаете просмотреть файл на который ссылается git:</p>
+
+
+  
+    
+  
+  
+  
+  
+
+
+<figure class="highlight ">
+  <figcaption>
+    
+      <span>Listing 1</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class=" code-highlight">$ cat roses.txt
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+roses are #ff0000
+violets are #0000ff
+all my base
+are belong to you
+=======
+Roses are red,
+Violets are blue,
+All of my base
+Are belong to you.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; master</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Замечательно! Весь файл, как показывает Listing 1, находится в конфликтном состоянии. Какой же вариант файла является более корректным? Оба варианта выглядят корректно. Верхний вариант написан в хакер-стиле с элементами цветовой кодировки в стиле HTML и с использованием только строчных букв. Нижний вариант выглядит более натурально, с использованием пунктуации и заглавных букв.</p>
+
+<p>Если бы это был ваш проект, вы бы могли просто выбрать один вариант и покончить с этим слиянием. Но проблема в том, что это не ваша поэма, вы никогда не читали эту поэму раньше, не были ответственны за написание или редактирование, и вы отлично понимаете что в случае не верного решения чья-то тяжёлая работа может кануть в небытие. Однако вас всё же назначили ответственным по слиянию этих веток. Что же вам делать?</p>
+
+<h2 id="назад-к-базе-back-to-base">Назад к Базе (Back to Base)</h2>
+
+<p>Хитрость заключается в том, что Listing 1 не даёт вам полную информацию, необходимую для совершения корректного слияния. На самом деле, в процессе слияния участвуют четыре важных части информации (состояния), три из которых просто необходимы для успешного разрешения конфликта. В случае Listing 1, Git предоставил вам только два состояния.</p>
+
+<p>Следующая диаграмма иллюстрирует эти четыре состояния:</p>
+
+<p><img src="http://1.bp.blogspot.com/_DzZflO6z3uM/TIzDapgYAlI/AAAAAAAAAM4/qtesWfDEdbY/s320/PainlessMerginginGit.png" alt="four states" /></p>
+
+<p>Состояния (B) и (C) относятся к текущим положениям (head) веток master и beta соответственно, эти два состояния как раз таки и отражены в Listing 1. Состояние (D) это результат слияния, то что вы хотите получить/сгенерировать в конечном итоге (в большинстве случаев Git автоматически генерирует состояние (D)). Состояние (А) на самом верху, представляет собой базу (основу) слияния веток master и beta. База слияния (A) это последний общий предок веток master и beta, и пока предположим что это база слияния уникальна. Как мы увидим позже состояние (A) играет ключевую роль в разрешении конфликтов. На диаграмме я также отразил дельты 1 и 2, которые представляют изменения между состояниями (A)-(B), и (A)-(C) соответственно. Зная состояния (A), (B) и (C) дельты 1 и 2 могут быть легко получены (вычислены). Обратите внимание, что дельты 1 и 2 могут состоять из более чем одного коммита. Но для наших целей будем считать что все дельты монолитны.</p>
+
+<p>Чтобы понять, как получить состояние (D), вы должны понимать что же операция слияния пытается сделать. Состояние (D) должно представлять собой сочетание изменений, внесённых в ветку master и beta соответственно. Т.е. другими словами сочетание дельт 1 и 2. Идея проста на поверхности и большую часть времени не требует вмешательства со стороны человека, за исключением особых случаев когда дельты затрагивают наслаиваемые (пересекающиеся) части файла. В такой ситуации вам требуется помочь машине сгенерировать результат (D), путём сравнения дельт 1 и 2.</p>
+
+<h2 id="определение-отличий-identifying-the-differences">Определение Отличий (Identifying the Differences)</h2>
+
+<p>Для того чтобы найти изменения внесённые в каждую ветку, необходимо знать как выглядит база слияния, состояние (A). Самый простой механизм получения информации о базе слияния, это установка опции merge.conflictstyle в значение diff3</p>
+
+<pre><code class="language-sh">$ git config merge.conflictstyle diff3
+</code></pre>
+
+<p>После включения этой опции, попробуйте заново сделать слияние (git reset &ndash;hard; git merge master) и проинспектируйте конфликтующий файл ещё раз:</p>
+
+
+  
+    
+  
+  
+  
+  
+
+
+<figure class="highlight ">
+  <figcaption>
+    
+      <span>Listing 2</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class=" code-highlight">$ cat roses.txt
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+roses are #ff0000
+violets are #0000ff
+all my base
+are belong to you
+|||||||
+roses are red
+violets are blue
+all my base
+are belong to you
+=======
+Roses are red,
+Violets are blue,
+All of my base
+Are belong to you.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; master</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Теперь мы видим третий фрагмент посередине, который и является базой слияния или состояние (A). Изменения видны как на ладони: в ветке beta (HEAD) человеческие названия цветов были заменены на HTML коды, а в ветку master добавили капитализацию и пунктуацию. Основываясь на этих знаниях, мы теперь знаем что результат должен включать в себя капитализацию, пунктуацию и HTML коды цветов.</p>
+
+<p>В принципе на этом можно было бы и закончить, потому что результат достигнут. Но есть решение и получше.</p>
+
+<h2 id="графическое-слияние-gui-merging">Графическое Слияние (GUI Merging)</h2>
+
+<p>Хотя и простое текстовое представление конфликта слияния делает свою работу в простых случаях, на практике конфликты могут быть более радикальными и сложными. В таких случаях могут помочь графические инструменты. Мой выбор пал на простой инструмент написанный на Python под названием <a href="http://meld.sourceforge.net">meld</a>, но может подойти любой другой графический инструмент, способный представить слияние в трёх-колоночном виде.</p>
+
+<p>Для использования графического инструмента (он должен быть установлен), после того как git пожаловался что есть конфликт, введите следующую команду:</p>
+
+<pre><code class="language-sh">$ git mergetool
+</code></pre>
+
+<p>Последует вопрос какой программой для слияния вы хотели бы воспользоваться, просто введите meld и нажмите Enter. Вот как окно программы может выглядеть (подразумевается опция merge.conflictstyle не была включена):</p>
+
+<p><img src="//3.bp.blogspot.com/_DzZflO6z3uM/TIzA-p3O6_I/AAAAAAAAAMY/ZX4FcjJ2pao/s640/meld1.png" alt="" /></p>
+
+<p>Несмотря на то что информация представлена бок о бок, она не отображает нужные фрагменты которые были в Listing 2. Мы не видим здесь фрагмента базы слияния (состояния (A)), что мы видим это файл roses.txt.LOCAL.2760.txt в левой колонке и файл roses.txt.REMOTE.2760.txt в правой колонке и файл посередине это неудачное слияние. Т.е. по сути нам представили состояния (B), (C) и несостоявшееся состояние (D), но состояние (A) отсутствует&hellip;</p>
+
+<p>Правда отсутствует? Давайте проверим, в старом добром терминале:</p>
+
+<pre><code class="language-sh">$ ls -1
+roses.txt
+roses.txt.BACKUP.2760.txt
+roses.txt.BASE.2760.txt
+roses.txt.LOCAL.2760.txt
+roses.txt.REMOTE.2760.txt
+</code></pre>
+
+<p>Видим интересующий нас файл: roses.txt.BASE.2760.txt. Это и есть файл базы слияния. Теперь нам осталось всего лишь найти изменения внесённые в ветки master и beta, по отношению к базе. Мы можем сделать это двумя отдельными вызовами meld:</p>
+
+<pre><code class="language-sh">$ meld roses.txt.LOCAL.2760.txt roses.txt.BASE.2760 &amp;
+$ meld roses.txt.BASE.2760 roses.txt.REMOTE.2760.txt &amp;
+</code></pre>
+
+<p>(Кто-то может подметить что было бы более разумно, поменять порядок аргументов в первом вызове, для того чтобы файл базы находился в левой колонке в обоих случаях, но именно такой порядок сохраняет подобие трёх-колоночного вида, при котором база остаётся по середине.) Результат выполнения - два окна как показано ниже:</p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure nocaption fig-50" >
+  
+    <a class="fancybox" href="//1.bp.blogspot.com/_DzZflO6z3uM/TIzB0vIY27I/AAAAAAAAAMg/sE3ozltiIlA/s400/meld2.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//1.bp.blogspot.com/_DzZflO6z3uM/TIzB0vIY27I/AAAAAAAAAMg/sE3ozltiIlA/s400/meld2.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure nocaption fig-50" >
+  
+    <a class="fancybox" href="//4.bp.blogspot.com/_DzZflO6z3uM/TIzCBmifzNI/AAAAAAAAAMo/xh-L4QEYuEk/s400/meld3.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//4.bp.blogspot.com/_DzZflO6z3uM/TIzCBmifzNI/AAAAAAAAAMo/xh-L4QEYuEk/s400/meld3.png" >
+  
+    </a>
+  
+  
+</div>
+</p>
+
+<p>При чтении первого окна справа налево и второго окна слева направо, становится ясно как день, какие изменения произошли в каждой ветке. Так как meld любезно подсветил все изменения, теперь практически не возможно пропустить даже мелко заметные правки (Кто-нибудь заметил добавление предлога &ldquo;of&rdquo; при просмотре текстового представления разрешения конфликта Listing 1 или даже Listing 2?)</p>
+
+<p>Вооружившись этими знаниями, мы теперь можем вернуться к трёх-колоночному представлению и сделать изменения. Моя стратегия ручного слияния это взять весь текст из ветки с более весомыми изменениями (в данном случае master/REMOTE т.е. beta), и поверх него производить пошаговые правки, т.е. вносить изменения сделанные в другой ветке (master). Вот что получилось:</p>
+
+<p><img src="//4.bp.blogspot.com/_DzZflO6z3uM/TIzCHHultVI/AAAAAAAAAMw/dduPVP_LA6o/s640/meld4.png" alt="" /></p>
+
+<h2 id="а-теперь-всё-вместе-all-together-now">А теперь всё вместе (All Together Now)</h2>
+
+<p>Надеюсь, вы найдёте этот трёх-окошечный метод разрешения конфликтов, таким же полезным каким нахожу его я. Но согласитесь что запускать новые вызовы meld вручную каждый раз при разрешении конфликтов, не очень то и удобно. Выход, это настроить git таким образом чтобы все три окна открывались автоматически при вызове команды git mergetool. Для этого можно создать выполняемый скрипт, который должен находится в переменной окружения PATH (например $HOME/bin/gitmerge), со следующим содержимым:</p>
+
+<pre><code class="language-sh">#!/bin/sh
+meld $2 $1 &amp;
+sleep 0.5
+meld $1 $3 &amp;
+sleep 0.5
+meld $2 $4 $3
+</code></pre>
+
+<p>И добавьте следующее в ваш ~/.gitconfig файл:</p>
+
+<pre><code>[merge]
+	tool = mymeld
+[mergetool &quot;mymeld&quot;]
+	cmd = $HOME/bin/gitmerge $BASE $LOCAL $REMOTE $MERGED
+</code></pre>
+
+<p>Теперь, когда вы в следующий раз будете запускать команду git mergetool для разрешения конфликта, откроются все три окна:</p>
+
+<pre><code>Окно дифа между BASE и LOCAL
+Окно дифа между BASE и REMOTE
+Окно трёх-колоночного вида
+</code></pre>
+
+<p>После того как вы привыкните к такому разрешению конфликтов с использованием трёх вышеупомянутых окон, вы скорее всего обнаружите, что процесс стал более методичным и механическим. В большинстве случаев, вам даже не придётся читать и понимать куски кода из каждой ветки, для того чтобы понять какой же вариант применить для слияния. Вам больше не понадобится догадываться, потому что вы будете гораздо более уверенным в корректности вашего комита. Из-за этой уверенности, появится чувство что разрешение конфликтов превратилось в увлекательное занятие.</p>
+
+<h3 id="бонус-от-переводчика">Бонус от переводчика</h3>
+
+<p>Для тех кто пользуется tmux и n?vim, предлагаю следующий скрипт <a href="https://github.com/vbauerster/dotfiles/blob/master/bin/gitmerge">gitmerge</a>:</p>
+
+<pre><code>#!/bin/sh
+sn=gitmerge
+
+tmux new-session -d -s &quot;$sn&quot; -n &quot;diff3&quot; &quot;nvim -d $2 $4 $3&quot;
+tmux split-window -t &quot;$sn:1&quot; -v &quot;nvim -d $2 $1&quot;
+tmux split-window -t &quot;$sn:1&quot; -h &quot;nvim -d $1 $3&quot;
+</code></pre>
+
+<p><strong>Примечание</strong>: если вы не используете <a href="https://github.com/vbauerster/dotfiles/blob/100cd6e3045a8d78a6a82f0b88dd51da1d827713/tmux.conf#L51-L52">эту опцию</a> в своем ~/.tmux.conf, то вам надо поменять в двух последних строках <code>&quot;$sn:1&quot;</code> на <code>&quot;$sn:0&quot;</code></p>
+
+<p>Соответственно добавьте следующее в ваш <a href="https://github.com/vbauerster/dotfiles/blob/100cd6e3045a8d78a6a82f0b88dd51da1d827713/gitconfig#L41-L44">~/.gitconfig</a></p>
+
+<pre><code>[mergetool &quot;gitmerge&quot;]
+	cmd = $HOME/bin/gitmerge \&quot;$BASE\&quot; \&quot;$LOCAL\&quot; \&quot;$REMOTE\&quot; \&quot;$MERGED\&quot;
+[merge]
+	tool = gitmerge
+</code></pre>
+
+<p>Воркфлоу разрешения конфликта будет выглядеть так:</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/git_merge_master_-_workflow.png" alt="git merge master
+workflow" /></p>
+
+<p>Пока игнорируем вопрос (Was the merge successful [y/n]?) и переключаемся в сессию под названием gitmerge (сочетание TMUXPREFIX + s):</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/session_switch.png" alt="sessiow switch" /></p>
+
+<p>Видим наше трёх-оконное представление на одном экране. Цифрами обозначены сплиты (panes) tmux&rsquo;a, буквами соответствующие состояния. Делаем правки для разрешения конфликта, т.е. редактируем состояние (D) и сохраняем. После этого возвращаемся обратно в исходную сессию tmux&rsquo;a и подтверждаем что слияние произошло успешно.</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/git_merge_master_-_diff3.png" alt="git merge master" /></p>
+
+<h3 id="git-rebase-master">git rebase master</h3>
+
+<p>Лично я предпочитаю и считаю более правильным делать сначала rebase master в ветке beta, и только после этого переключаться в master и делать git merge beta. В принципе воркфлоу не сильно отличается, за исключением трёх-оконного вида.</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/git_rebase_master_-_workflow.png" alt="git merge master workflow" /></p>
+
+<p>Переключаемся в сессию gitmerge</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/session_switch.png" alt="sessiow switch" /></p>
+
+<p>Обратите внимание, что состояния (B) и (C) поменялись местами:</p>
+
+<p><img src="//github.com/vbauerster/PainlessMergeConflict/raw/master/diff3/git_rebase_master_-_diff3.png" alt="git merge master" /></p>
+
+<p>Рекомендую всем поиграться с <a href="https://github.com/vbauerster/PainlessMergeConflict/blob/master/mergeconflict.tgz">примером репозитария</a> хотя бы один раз, сделать разрешение конфликта по вышеописанной схеме. Лично я больше не гадаю а что же выбрать &ldquo;Accept theirs&rdquo; или &ldquo;Accept yours&rdquo; :)</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io//tags/git/">git</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Vladimir Bauer. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2f%25D0%25B1%25D0%25B5%25D0%25B7%25D0%25B1%25D0%25BE%25D0%25BB%25D0%25B5%25D0%25B7%25D0%25BD%25D0%25B5%25D0%25BD%25D0%25BD%25D0%25BE%25D0%25B5-%25D1%2580%25D0%25B0%25D0%25B7%25D1%2580%25D0%25B5%25D1%2588%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-merge-%25D0%25BA%25D0%25BE%25D0%25BD%25D1%2584%25D0%25BB%25D0%25B8%25D0%25BA%25D1%2582%25D0%25BE%25D0%25B2-%25D0%25B2-git%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://avatars1.githubusercontent.com/u/2206533" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Vladimir Bauer</h4>
+    
+      <div id="about-card-bio">Blogger &middot; Programmer &middot; Gopher</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Turkmenistan
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+                <h3 class="media-heading">Better pull requesting into Go project</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Once upon a time, I&rsquo;ve decided to contribute to an <a href="https://github.com/monochromegane/the_platinum_searcher">open source project</a> written in <a href="https://golang.org/">Go</a>. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/">
+                <h3 class="media-heading">Безболезненное разрешение Merge конфликтов в Git</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Мой вольный перевод статьи <a href="http://blog.wuwon.id.au/2010/09/painless-merge-conflict-resolution-in.html">Painless merge conflict resolution in Git</a>.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://vbauerster.github.io/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         3 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://vbauerster.github.io/images/mycover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="https://vbauerster.github.io/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/vbauerster.github.io\/2017\/04\/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git\/';
+          
+            this.page.identifier = '\/2017\/04\/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'vbauerster-github-io';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+
+    
+  </body>
+</html>
+
