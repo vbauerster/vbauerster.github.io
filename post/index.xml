@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Vladimir&#39;s blog</title>
+    <link>https://vbauerster.github.io/post/</link>
+    <description>Recent content in Posts on Vladimir&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 14 Apr 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://vbauerster.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Better pull requesting into Go project</title>
+      <link>https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/</link>
+      <pubDate>Fri, 14 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/</guid>
+      <description>&lt;p&gt;Once upon a time, I&amp;rsquo;ve decided to contribute to an &lt;a href=&#34;https://github.com/monochromegane/the_platinum_searcher&#34;&gt;open source project&lt;/a&gt; written in &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&amp;rsquo;t such a smooth experience.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
