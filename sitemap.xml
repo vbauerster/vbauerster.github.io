@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/</loc>
+    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
   </url>
@@ -23,7 +28,7 @@
   
   <url>
     <loc>https://vbauerster.github.io/categories/development/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -35,13 +40,13 @@
   
   <url>
     <loc>https://vbauerster.github.io/tags/golang/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://vbauerster.github.io/post/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -59,7 +64,7 @@
   
   <url>
     <loc>https://vbauerster.github.io/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
