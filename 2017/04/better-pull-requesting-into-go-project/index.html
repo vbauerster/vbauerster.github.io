@@ -277,7 +277,7 @@ github.com/vbauerster/the_platinum_searcher/cmd/pt
 
 <p>I was editing files inside <code>~GOPATH/src/github.com/vbauerster/the_platinum_searcher</code> directory, for Go it is <code>github.com/vbauerster/the_platinum_searcher</code> package, but the source code <a href="https://github.com/monochromegane/the_platinum_searcher/blob/c7d8eec66dca50773e6b4ee7dfdad2174860b9b1/cmd/pt/main.go#L7">imports</a> original package. So all my changes were not recognized because of that. As a workaround I had to replace the original package with my fork package in the whole codebase. Thankfully it was the only one occurrence to replace.</p>
 
-<h4 id="thinking-about-better-ways">Thinking about better ways</h4>
+<h4 id="thinking-of-a-better-way">Thinking of a better way</h4>
 
 <p>Temporary replacing imports is not obviously a good way, because you have to replace them back to original, when your fork is ready to go. So at first I thought cloning the fork to a temporary directory outside of my primary <em>$GOPATH</em> will help. But it didn&rsquo;t. Moreover I had to setup new one-time <em>$GOPATH</em> before cloning and with my slow internet connection, wait a considerable amount of time, for all dependencies to finish to download.</p>
 
