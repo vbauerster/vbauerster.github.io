@@ -19,7 +19,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Hugo 0.21-DEV with theme Tranquilpeak 0.4.0-SNAPSHOT">
+    <meta name="generator" content="Hugo 0.37.1 with theme Tranquilpeak 0.4.3-BETA">
     <title>Removing item(s) from a slice, while iterating in Go</title>
     <meta name="author" content="Vladimir Bauer">
     <meta name="keywords" content="development">
@@ -39,9 +39,9 @@ programming language.
     <meta property="og:type" content="blog">
     <meta property="og:title" content="Removing item(s) from a slice, while iterating in Go">
     <meta property="og:url" content="/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
-    <meta property="og:site_name" content="Vladimir&#39;s blog">
+    <meta property="og:site_name" content="YA blog">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Vladimir&#39;s blog">
+    <meta name="twitter:title" content="YA blog">
     <meta name="twitter:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
 It seems to be a trivial task, so lets see how to accomplish this in Go
 programming language.
@@ -70,7 +70,7 @@ programming language.
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://vbauerster.github.io/css/style-h63bw1xth8vvjaqwlbjvebagy7w4erwpbhxigjixv5z0adzrhcquyjicocub.min.css" />
+    <link rel="stylesheet" href="https://vbauerster.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
     
     
 
@@ -95,7 +95,7 @@ ga('send', 'pageview');
       <header id="header" data-behavior="5">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://vbauerster.github.io/">Vladimir&#39;s blog</a>
+    <a class="header-title-link" href="https://vbauerster.github.io/">YA blog</a>
   </div>
   
     
@@ -121,7 +121,7 @@ ga('send', 'pageview');
         </a>
         <h4 class="sidebar-profile-name">Vladimir Bauer</h4>
         
-          <h5 class="sidebar-profile-bio">Blogger &middot; Programmer &middot; Gopher</h5>
+          <h5 class="sidebar-profile-bio">Blogger &middot; Programmer &middot; Dream hacker</h5>
         
       </div>
     
@@ -183,7 +183,7 @@ ga('send', 'pageview');
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1351845/vladimir-bauer" target="_blank">
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1351845/vladimir-bauer" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
       
@@ -193,7 +193,7 @@ ga('send', 'pageview');
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/vbauerster" target="_blank">
+      <a class="sidebar-button-link " href="https://github.com/vbauerster" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -235,10 +235,11 @@ ga('send', 'pageview');
       Removing item(s) from a slice, while iterating in Go
     </h1>
   
-  <div class="postShorten-meta post-meta">
   
-    <time itemprop="datePublished" datetime="2017-04-16T00:00:00Z">
-      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2017-04-16T00:00:00Z">
+        
   
   
   
@@ -246,9 +247,9 @@ ga('send', 'pageview');
     16 April 2017
   
 
-    </time>
-  
-  
+      </time>
+    
+    
   
   
     <span>in</span>
@@ -257,8 +258,7 @@ ga('send', 'pageview');
     
   
 
-
-</div>
+  </div>
 
 </div>
           
@@ -284,7 +284,7 @@ from a list directly. For example, following code will throw
   
 
 
-<figure class="highlight java">
+<figure class="highlight java language-java">
   <figcaption>
     
   </figcaption>
@@ -295,7 +295,7 @@ from a list directly. For example, following code will throw
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
         </td>
         <td class="code">
-          <pre class="java code-highlight">@Test
+          <pre class="code-highlight language-java"><code class="java">@Test
 public void testListCur(){
     List&lt;String&gt; li=new ArrayList&lt;String&gt;();
     for(int i=0;i&lt;10;i&#43;&#43;){
@@ -307,7 +307,7 @@ public void testListCur(){
             li.remove(&#34;str3&#34;);
     }
     System.out.println(li);
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -335,7 +335,7 @@ First of to remove an item from a slice you need to use built-in function
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
       <span>daysOfWeek.go</span><a href="https://play.golang.org/p/pRhl5mQOsc" target="_blank" rel="external">playground</a>
@@ -348,7 +348,7 @@ First of to remove an item from a slice you need to use built-in function
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">package main
+          <pre class="code-highlight language-go"><code class="go">package main
 
 import &#34;fmt&#34;
 
@@ -357,7 +357,7 @@ func main() {
 	// let&#39;s remove &#34;Monday&#34; from daysOfWeek
 	daysOfWeek = append(daysOfWeek[:1], daysOfWeek[2:]...)
 	fmt.Println(daysOfWeek) // [Sunday Tuesday Wednesday Thursday Friday Saturday]
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -377,7 +377,7 @@ func main() {
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
   </figcaption>
@@ -388,7 +388,7 @@ func main() {
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">package main
+          <pre class="code-highlight language-go"><code class="go">package main
 
 import &#34;fmt&#34;
 
@@ -406,7 +406,7 @@ func init() {
 		{&#34;P2&#34;, false},
 		{&#34;P3&#34;, true},
 	}
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -430,7 +430,7 @@ func init() {
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
       <span>withRange.go</span><a href="https://play.golang.org/p/_XAfory3AN" target="_blank" rel="external">playground</a>
@@ -443,14 +443,14 @@ func init() {
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">func main() {
+          <pre class="code-highlight language-go"><code class="go">func main() {
 	for i, p := range people {
 		if p.Remove {
 			people = append(people[:i], people[i&#43;1:]...)
 		}
 	}
 	fmt.Println(people) // [{P0 false} {P1 false} {P2 false}]
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -477,7 +477,7 @@ remove operation. Let&rsquo;s try to accomplish this with plain old for loop:</p
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
       <span>withPlainOldForV1.go</span><a href="https://play.golang.org/p/o7bgZ57vbO" target="_blank" rel="external">playground</a>
@@ -490,7 +490,7 @@ remove operation. Let&rsquo;s try to accomplish this with plain old for loop:</p
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">package main
+          <pre class="code-highlight language-go"><code class="go">package main
 
 import &#34;fmt&#34;
 
@@ -519,7 +519,7 @@ func main() {
 		}
 	}
 	fmt.Println(people) // [{P0 false} {P2 false}]
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -544,7 +544,7 @@ Bearing that in mind we can optimize to something like this:</p>
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
       <span>withPlainOldForV2.go</span><a href="https://play.golang.org/p/hRxUtXc0GS" target="_blank" rel="external">playground</a>
@@ -557,7 +557,7 @@ Bearing that in mind we can optimize to something like this:</p>
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">func main() {
+          <pre class="code-highlight language-go"><code class="go">func main() {
 	for i, rlen := 0, len(people); i &lt; rlen; i&#43;&#43; {
 		j := i - (rlen - len(people))
 		if people[j].Remove {
@@ -565,7 +565,7 @@ Bearing that in mind we can optimize to something like this:</p>
 		}
 	}
 	fmt.Println(people) // [{P0 false} {P2 false}]
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -589,7 +589,7 @@ Bearing that in mind we can optimize to something like this:</p>
   
 
 
-<figure class="highlight go">
+<figure class="highlight go language-go">
   <figcaption>
     
       <span>withPlainOldForV3.go</span><a href="https://play.golang.org/p/j6YyFLKDkl" target="_blank" rel="external">playground</a>
@@ -602,14 +602,14 @@ Bearing that in mind we can optimize to something like this:</p>
           <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
         </td>
         <td class="code">
-          <pre class="go code-highlight">func main() {
+          <pre class="code-highlight language-go"><code class="go">func main() {
 	for i := len(people) - 1; i &gt;= 0; i-- {
 		if people[i].Remove {
 			people = append(people[:i], people[i&#43;1:]...)
 		}
 	}
 	fmt.Println(people) // [{P0 false} {P2 false}]
-}</pre>
+}</code></pre>
         </td>
       </tr>
     </tbody>
@@ -630,74 +630,73 @@ Bearing that in mind we can optimize to something like this:</p>
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io//tags/golang/">golang</a>
+  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io/tags/golang/">golang</a>
 
                   </div>
                 
               
             
-            <div class="post-actions-wrap">
-  <nav>
-    <ul class="post-actions post-action-nav">
+            
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
       
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--disabled">
-          
-            <i class="fa fa-angle-left"></i>
-            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
           </a>
         </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
         <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
-          
-            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-            <i class="fa fa-angle-right"></i>
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
           </a>
         </li>
       
-    </ul>
-  </nav>
-  <ul class="post-actions post-action-share">
-    
-      <li class="post-action hide-lg hide-md hide-sm">
-        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
-          <i class="fa fa-share-alt"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-google-plus"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-facebook-official"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </li>
-    
-    
       <li class="post-action">
-        <a class="post-action-btn btn btn--default" href="#disqus_thread">
-          <i class="fa fa-comment-o"></i>
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
         </a>
       </li>
-    
-    <li class="post-action">
-      
-        <a class="post-action-btn btn btn--default" href="#">
-      
-        <i class="fa fa-list"></i>
-      </a>
-    </li>
-  </ul>
-</div>
+    </ul>
+  </div>
 
 
             
@@ -711,94 +710,92 @@ Bearing that in mind we can optimize to something like this:</p>
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    &copy; 2017 Vladimir Bauer. All Rights Reserved
+    &copy; 2018 Vladimir Bauer. All Rights Reserved
   </span>
 </footer>
 
       </div>
       <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        <div class="post-actions-wrap">
-  <nav>
-    <ul class="post-actions post-action-nav">
+        
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
       
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--disabled">
-          
-            <i class="fa fa-angle-left"></i>
-            <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
           </a>
         </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
         <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/" data-tooltip="Better pull requesting into Go project">
-          
-            <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-            <i class="fa fa-angle-right"></i>
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
           </a>
         </li>
       
-    </ul>
-  </nav>
-  <ul class="post-actions post-action-share">
-    
-      <li class="post-action hide-lg hide-md hide-sm">
-        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
-          <i class="fa fa-share-alt"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-google-plus"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-facebook-official"></i>
-        </a>
-      </li>
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </li>
-    
-    
       <li class="post-action">
-        <a class="post-action-btn btn btn--default" href="#disqus_thread">
-          <i class="fa fa-comment-o"></i>
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
         </a>
       </li>
-    
-    <li class="post-action">
-      
-        <a class="post-action-btn btn btn--default" href="#">
-      
-        <i class="fa fa-list"></i>
-      </a>
-    </li>
-  </ul>
-</div>
+    </ul>
+  </div>
 
 
       </div>
       <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
   <ul class="share-options">
-    <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
-      </a>
-    </li>
-    <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
-      </a>
-    </li>
-    <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fvbauerster.github.io%2f2017%2f04%2fremoving-items-from-a-slice-while-iterating-in-go%2f">
-        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
-      </a>
-    </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fvbauerster.github.io%2F2017%2F04%2Fremoving-items-from-a-slice-while-iterating-in-go%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fvbauerster.github.io%2F2017%2F04%2Fremoving-items-from-a-slice-while-iterating-in-go%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
   </ul>
 </div>
 <div id="share-options-mask" class="share-options-mask"></div>
@@ -814,14 +811,20 @@ Bearing that in mind we can optimize to something like this:</p>
     
     <h4 id="about-card-name">Vladimir Bauer</h4>
     
-      <div id="about-card-bio">Blogger &middot; Programmer &middot; Gopher</div>
+      <div id="about-card-bio">Blogger &middot; Programmer &middot; Dream hacker</div>
     
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Software Developer, mostly intrested in Go
+      </div>
     
     
       <div id="about-card-location">
         <i class="fa fa-map-marker"></i>
         <br/>
-        Turkmenistan
+        Moscow
       </div>
     
   </div>
@@ -831,7 +834,7 @@ Bearing that in mind we can optimize to something like this:</p>
   <div class="modal">
     <div class="modal-header">
       <span class="close-button"><i class="fa fa-close"></i></span>
-      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
         <span class="searchby-algolia-text text-color-light text-small">by</span>
         <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
       </a>
@@ -902,23 +905,6 @@ programming language.
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://vbauerster.github.io/post/">
-                <h3 class="media-heading">Posts</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2017
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -926,7 +912,7 @@ programming language.
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         4 posts found
+         3 posts found
       </p>
     </div>
   </div>
@@ -939,23 +925,25 @@ programming language.
 
 
     
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" integrity="sha256-IFHWFEbU2/+wNycDECKgjIRSirRNIDp2acEB5fvdVRU=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js" integrity="sha256-+mpyNVJsNt4rVXCw0F+pAOiB3YxmHgrbJsx4ecPuUaI=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js" integrity="sha256-vMxgR/7FtLovVA+IPrR7+xTgIgARH7y9VZQnmmi0HDI=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js" integrity="sha256-N0qFUh7/9vLvia87dDndewmsgsyYoNkdA212tPc+2NI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://vbauerster.github.io/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+<script src="https://vbauerster.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
   
-    <script crossorigin="anonymous" defer="true" integrity="sha256-LVuWfOU0rWFMCJNl1xb3K2HSWfxtK4IPbqEerP1P83M=" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
   
+
 
 <script>
 $(document).ready(function() {
   hljs.configure({ classPrefix: '', useBR: false });
-  $('pre.code-highlight, pre > code').each(function(i, block) {
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
     if (!$(this).hasClass('codeblock')) {
       $(this).addClass('codeblock');
     }
@@ -963,6 +951,7 @@ $(document).ready(function() {
   });
 });
 </script>
+
 
   
     
