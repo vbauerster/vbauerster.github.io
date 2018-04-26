@@ -532,11 +532,11 @@ meld $2 $4 $3
 sn=gitmerge
 
 tmux new-session -d -s &quot;$sn&quot; -n &quot;diff3&quot; &quot;nvim -d $2 $4 $3&quot;
-tmux split-window -t &quot;$sn:1&quot; -v &quot;nvim -d $2 $1&quot;
+tmux new-window -t &quot;$sn:&quot; -n &quot;diff4&quot; &quot;nvim -d $2 $1&quot;
 tmux split-window -t &quot;$sn:1&quot; -h &quot;nvim -d $1 $3&quot;
+tmux last-window -t &quot;$sn&quot;
+tmux switch-client -t &quot;$sn&quot;
 </code></pre>
-
-<p><strong>Примечание</strong>: если вы не используете <a href="https://github.com/vbauerster/dotfiles/blob/100cd6e3045a8d78a6a82f0b88dd51da1d827713/tmux.conf#L51-L52">эту опцию</a> в своем ~/.tmux.conf, то вам надо поменять в двух последних строках <code>&quot;$sn:1&quot;</code> на <code>&quot;$sn:0&quot;</code></p>
 
 <p>Соответственно добавьте следующее в ваш <a href="https://github.com/vbauerster/dotfiles/blob/100cd6e3045a8d78a6a82f0b88dd51da1d827713/gitconfig#L41-L44">~/.gitconfig</a></p>
 
