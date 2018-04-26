@@ -19,7 +19,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Hugo 0.37.1 with theme Tranquilpeak 0.4.3-BETA">
+    <meta name="generator" content="Hugo 0.40.1 with theme Tranquilpeak 0.4.3-BETA">
     <title>Removing item(s) from a slice, while iterating in Go</title>
     <meta name="author" content="Vladimir Bauer">
     <meta name="keywords" content="development">
@@ -617,6 +617,54 @@ Bearing that in mind we can optimize to something like this:</p>
 </figure>
 
 <p>Now, this version is clean and fully functional. Hope you find this useful.</p>
+
+<p>Update: 26.04.2018</p>
+
+<p>Following is simpler way to filter a slice without allocating a new underlying array:</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+    
+  
+  
+    
+  
+
+
+<figure class="highlight go language-go">
+  <figcaption>
+    
+      <span>filterSlice.go</span><a href="https://play.golang.org/p/346LnF-E2H0" target="_blank" rel="external">playground</a>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	// create a zero-length slice with the same underlying array
+	tmp := people[:0]
+	for _, p := range people {
+		if !p.Remove {
+			tmp = append(tmp, p)
+		}
+	}
+	fmt.Println(tmp) // [{P0 false} {P2 false}]
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
 <p>Recommended further reading: <a href="https://medium.com/golangspec/slice-expressions-in-go-963368c20765">Slice expressions in Go</a></p>
               
