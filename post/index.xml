@@ -1,15 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on YA blog</title>
+    <title>Posts on Do not limit yourself because you already “know”</title>
     <link>https://vbauerster.github.io/post/</link>
-    <description>Recent content in Posts on YA blog</description>
+    <description>Recent content in Posts on Do not limit yourself because you already “know”</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Apr 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 21 Nov 2019 14:08:23 +0500</lastBuildDate>
     
 	<atom:link href="https://vbauerster.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Is go keyword always non-blocking?</title>
+      <link>https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/</link>
+      <pubDate>Thu, 21 Nov 2019 14:08:23 +0500</pubDate>
+      
+      <guid>https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/</guid>
+      <description>&lt;p&gt;When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&amp;rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&amp;rsquo;s explore why.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Removing item(s) from a slice, while iterating in Go</title>

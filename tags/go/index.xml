@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Do not limit yourself because you already “know”</title>
-    <link>https://vbauerster.github.io/</link>
-    <description>Recent content on Do not limit yourself because you already “know”</description>
+    <title>go on Do not limit yourself because you already “know”</title>
+    <link>https://vbauerster.github.io/tags/go/</link>
+    <description>Recent content in go on Do not limit yourself because you already “know”</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 21 Nov 2019 14:08:23 +0500</lastBuildDate>
     
-	<atom:link href="https://vbauerster.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://vbauerster.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -38,15 +38,6 @@ programming language.&lt;/p&gt;</description>
       
       <guid>https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/</guid>
       <description>&lt;p&gt;Once upon a time, I&amp;rsquo;ve decided to contribute to an &lt;a href=&#34;https://github.com/monochromegane/the_platinum_searcher&#34;&gt;open source project&lt;/a&gt; written in &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&amp;rsquo;t such a smooth experience.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Безболезненное разрешение Merge конфликтов в Git</title>
-      <link>https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/</link>
-      <pubDate>Fri, 14 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/</guid>
-      <description>&lt;p&gt;Мой вольный перевод статьи &lt;a href=&#34;http://blog.wuwon.id.au/2010/09/painless-merge-conflict-resolution-in.html&#34;&gt;Painless merge conflict resolution in Git&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
   </channel>

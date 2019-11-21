@@ -1,6 +1,41 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://vbauerster.github.io/categories/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/tags/go/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/post/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/categories/programming/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/tags/</loc>
+    <lastmod>2019-11-21T14:08:23+05:00</lastmod>
+  </url>
   
   <url>
     <loc>https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/</loc>
@@ -13,60 +48,27 @@
   </url>
   
   <url>
+    <loc>https://vbauerster.github.io/categories/development/</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/tags/git/</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://vbauerster.github.io/categories/translation/</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://vbauerster.github.io/archives/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/categories/development/</loc>
-    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/tags/git/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/tags/golang/</loc>
-    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/post/</loc>
-    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/tags/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/categories/translation/</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://vbauerster.github.io/</loc>
-    <lastmod>2017-04-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
 </urlset>

@@ -1,26 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Development on YA blog</title>
+    <title>development on Do not limit yourself because you already “know”</title>
     <link>https://vbauerster.github.io/categories/development/</link>
-    <description>Recent content in Development on YA blog</description>
+    <description>Recent content in development on Do not limit yourself because you already “know”</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Apr 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 14 Apr 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://vbauerster.github.io/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Removing item(s) from a slice, while iterating in Go</title>
-      <link>https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/</link>
-      <pubDate>Sun, 16 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/</guid>
-      <description>&lt;p&gt;How easy would it be to remove item(s) from a slice, while iterating that slice?
-It seems to be a trivial task, so lets see how to accomplish this in Go
-programming language.&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>Better pull requesting into Go project</title>

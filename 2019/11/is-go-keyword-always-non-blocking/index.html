@@ -7,36 +7,34 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="Vladimir Bauer">
-<meta name="keywords" content="development, golang">
-<meta name="description" content="Once upon a time, I&rsquo;ve decided to contribute to an open source project written in Go. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.">
+<meta name="keywords" content="golang, goroutine">
+<meta name="description" content="When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&rsquo;s explore why.">
 
 
-<meta property="og:description" content="Once upon a time, I&rsquo;ve decided to contribute to an open source project written in Go. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.">
+<meta property="og:description" content="When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&rsquo;s explore why.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Better pull requesting into Go project">
-<meta name="twitter:title" content="Better pull requesting into Go project">
-<meta property="og:url" content="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
-<meta property="twitter:url" content="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+<meta property="og:title" content="Is go keyword always non-blocking?">
+<meta name="twitter:title" content="Is go keyword always non-blocking?">
+<meta property="og:url" content="https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
+<meta property="twitter:url" content="https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
 <meta property="og:site_name" content="Do not limit yourself because you already “know”">
-<meta property="og:description" content="Once upon a time, I&rsquo;ve decided to contribute to an open source project written in Go. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.">
-<meta name="twitter:description" content="Once upon a time, I&rsquo;ve decided to contribute to an open source project written in Go. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.">
+<meta property="og:description" content="When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&rsquo;s explore why.">
+<meta name="twitter:description" content="When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&rsquo;s explore why.">
 <meta property="og:locale" content="en-us">
 
   
-    <meta property="article:published_time" content="2017-04-14T00:00:00">
+    <meta property="article:published_time" content="2019-11-21T14:08:23">
   
   
-    <meta property="article:modified_time" content="2017-04-14T00:00:00">
+    <meta property="article:modified_time" content="2019-11-21T14:08:23">
   
-  
-  
-    
-      <meta property="article:section" content="development">
-    
   
   
     
-      <meta property="article:tag" content="git">
+      <meta property="article:section" content="programming">
+    
+  
+  
     
       <meta property="article:tag" content="go">
     
@@ -63,7 +61,7 @@
   <meta property="twitter:image" content="https://avatars1.githubusercontent.com/u/2206533">
 
 
-    <title>Better pull requesting into Go project</title>
+    <title>Is go keyword always non-blocking?</title>
 
     <link rel="icon" href="https://vbauerster.github.io/favicon.png">
     
@@ -72,7 +70,7 @@
       <link rel="publisher" href="https://plus.google.com/&#43;vbauerster">
     
 
-    <link rel="canonical" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+    <link rel="canonical" href="https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -255,19 +253,19 @@ if (!doNotTrack) {
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      Better pull requesting into Go project
+      Is go keyword always non-blocking?
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2017-04-14T00:00:00Z">
+      <time itemprop="datePublished" datetime="2019-11-21T14:08:23&#43;05:00">
         
   
   
   
   
-    14 April 2017
+    21 November 2019
   
 
       </time>
@@ -277,7 +275,7 @@ if (!doNotTrack) {
   
     <span>in</span>
     
-      <a class="category-link" href="https://vbauerster.github.io/categories/development">development</a>
+      <a class="category-link" href="https://vbauerster.github.io/categories/programming">programming</a>
     
   
 
@@ -287,84 +285,307 @@ if (!doNotTrack) {
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>Once upon a time, I&rsquo;ve decided to contribute to an <a href="https://github.com/monochromegane/the_platinum_searcher">open source project</a> written in <a href="https://golang.org/">Go</a>. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.</p>
+              <p>When you look at your go code and see the go keyword, your first thought is like ok this is non-blocking because it&rsquo;s prefixed with the go keyword. But sometimes this assumption may be wrong, let&rsquo;s explore why.</p>
 
-<p>My first naive step was to clone my fork to a temporary directory inside my current <em>$GOPATH</em>:</p>
+<p>Let say we have simple <code>ChatBot</code> struct with a <code>say</code> method:</p>
 
-<pre><code class="language-sh">~GOPATH/src/github.com/vbauerster
-❯ git clone https://github.com/vbauerster/the_platinum_searcher
-</code></pre>
 
-<p>But soon I realized, that my changes are not beeing picked up, when building my fork. A little investigation revealed the reason:</p>
+  
+    
+  
+  
+    
+  
+  
+  
 
-<pre><code class="language-sh">~GOPATH/src/github.com/vbauerster/the_platinum_searcher gcase*
-❯ go list ./...
-github.com/vbauerster/the_platinum_searcher
-github.com/vbauerster/the_platinum_searcher/cmd/pt
-</code></pre>
 
-<p>I was editing files inside <code>~GOPATH/src/github.com/vbauerster/the_platinum_searcher</code> directory, for Go it is <code>github.com/vbauerster/the_platinum_searcher</code> package, but the source code <a href="https://github.com/monochromegane/the_platinum_searcher/blob/c7d8eec66dca50773e6b4ee7dfdad2174860b9b1/cmd/pt/main.go#L7">imports</a> original package. So all my changes were not recognized because of that. As a workaround I had to replace the original package with my fork package in the whole codebase. Thankfully it was the only one occurrence to replace.</p>
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">type ChatBot struct {
+	Name string
+}
 
-<h4 id="thinking-of-a-better-way">Thinking of a better way</h4>
+func (p *ChatBot) Say(word string) {
+	fmt.Printf(&#34;%s: %s\n&#34;, p.Name, word)
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
-<p>Temporary replacing imports is not obviously a good way, because you have to replace them back to original, when your fork is ready to go. So at first I thought cloning the fork to a temporary directory outside of my primary <em>$GOPATH</em> will help. But it didn&rsquo;t. Moreover I had to setup new one-time <em>$GOPATH</em> before cloning and with my slow internet connection, wait a considerable amount of time, for all dependencies to finish to download.</p>
+<p>Ok, next we tasked to make our chat bot to say something:</p>
 
-<h4 id="brilliant-idea-push-to-upstream">Brilliant idea: push to upstream</h4>
 
-<p>With this method, you don&rsquo;t even need to clone your fork to your machine. Let me explain step by step. First, make a fork of interested project repo. In my case:</p>
+  
+    
+  
+  
+    
+  
+  
+  
 
-<p>Interested project: <code>https://github.com/monochromegane/the_platinum_searcher</code></p>
 
-<p>Fork project: <code>https://github.com/vbauerster/the_platinum_searcher</code></p>
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{Name: &#34;Max&#34;}
+	bot.Say(&#34;Hello!&#34;)
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
-<p>Interested project should be already in your <em>$GOPATH</em>, if not then do <code>go get</code>.</p>
+<p>At some point we noticed that our chat bot is blocking real users, and decided to make it non-blocking. Solution was pretty straightforward as adding <code>go</code> keyword in front of the method call.</p>
 
-<p>Next, add you fork as remote upstream in original project directory. This will
-let you make changes directly in cloned (not forked) repo.</p>
 
-<pre><code class="language-sh">~GOPATH/src/github.com/monochromegane/the_platinum_searcher master
-❯ git remote add upstream https://github.com/vbauerster/the_platinum_searcher
+  
+    
+  
+  
+    
+  
+  
+  
 
-~GOPATH/src/github.com/monochromegane/the_platinum_searcher master
-❯ git remote -v
-origin  https://github.com/monochromegane/the_platinum_searcher (fetch)
-origin  https://github.com/monochromegane/the_platinum_searcher (push)
-upstream        https://github.com/vbauerster/the_platinum_searcher (fetch)
-upstream        https://github.com/vbauerster/the_platinum_searcher (push)
-</code></pre>
 
-<p>Now you&rsquo;re ready to make changes in upstream branch:</p>
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{name: &#34;Max&#34;}
+	go bot.Say(&#34;Hello!&#34;)
+	// below is imaginary code dealing with real users
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
-<pre><code class="language-sh">~GOPATH/src/github.com/monochromegane/the_platinum_searcher master
-❯ git checkout -b upstream upstream/master
-Branch upstream set up to track remote branch master from upstream.
-Switched to a new branch 'upstream'
-</code></pre>
+<p>Everybody was happy, until we received a new task to make our bot to say something other than hello and behave a human like. So next we implemented <code>GeneratePhrase</code> method:</p>
 
-<p><strong>Note</strong>: if you get following error</p>
 
-<pre><code class="language-sh">fatal: 'upstream/master' is not a commit and a branch 'upstream' cannot be created from it
-</code></pre>
+  
+    
+  
+  
+    
+  
+  
+  
 
-<p>make sure you issue <code>git fetch upstream</code> command, before above step.</p>
 
-<p>Now you don&rsquo;t need to search and replace any import paths. When you&rsquo;re done with changes, <code>git push</code> inside upstream branch will push into your fork master branch. After that you can make pull request on GitHub page of your fork.</p>
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func (p *ChatBot) GeneratePhrase() string {
+	// our human like behavior, think before saying
+	// though not all humans following this rule :lol
+	time.Sleep(time.Second)
+	// some sophisticated code to generate a random phrase
+	return &#34;I see&#34;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
-<p>Personally, I don&rsquo;t like pull requesting from a fork&rsquo;s master branch. Therefore, right after forking the project, I <a href="https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/">make a branch</a> in the fork&rsquo;s repo, to be able to connect that branch to upstream:</p>
+<p>Now it&rsquo;s time to integrate, and it looks like we can now replace hardcoded <code>&quot;Hello!&quot;</code> with our new method! Done with it and it looks cool!</p>
 
-<pre><code class="language-sh">~GOPATH/src/github.com/monochromegane/the_platinum_searcher master
-❯ git checkout -b gcase upstream/gcase
-Branch gcase set up to track remote branch gcase from upstream.
-Switched to a new branch 'gcase'
-</code></pre>
 
-<p>Finally after your pull request is accepted, you can safely remove upstream and all accociated branches:</p>
+  
+    
+  
+  
+    
+  
+  
+  
 
-<pre><code class="language-sh">~GOPATH/src/github.com/monochromegane/the_platinum_searcher master
-❯ git remote remove upstream
-</code></pre>
 
-<p>Happy pull requesting!</p>
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{Name: &#34;Max&#34;}
+	go bot.Say(bot.GeneratePhrase())
+	// below is imaginary code dealing with real users
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Deployed to prod and everybody was happy again. Well happiness is a volatile substance and indeed we noticed that our bot is blocking real users again. But wait theres is a <code>go</code> keyword in front of the bot&rsquo;s <code>Say</code> method! Doesn&rsquo;t it mean that the entire statement <code>bot.Say(bot.GeneratePhrase())</code> should be async and non-blocking? Well let&rsquo;s check.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+    
+  
+  
+    
+  
+
+
+<figure class="highlight go language-go">
+  <figcaption>
+    
+      <span>main.go</span><a href="https://play.golang.org/p/hDXH5LIqoaZ" target="_blank" rel="external">playground</a>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{Name: &#34;Max&#34;}
+	start := time.Now()
+	go bot.Say(bot.GeneratePhrase())
+	fmt.Println(time.Since(start))
+	// below is imaginary code dealing with real users
+
+	// it&#39;s more idiomatic to use sync.WaitGroup to wait,
+	// but for simplicity sake, we just Sleep one second here.
+	time.Sleep(time.Second)
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Running this contrived example reveals, that entire <code>go bot.Say(bot.GeneratePhrase())</code> statement takes <code>1s</code> to run and there is nothing wrong with the <code>go</code> keyword. The <code>go</code> keyword applies to the <code>bot.Say</code> method only, but we are feeding the method&rsquo;s parameter with another calculation <code>bot.GeneratePhrase()</code> which takes place in the main&rsquo;s goroutine. It turns out that above code is equivalent to the following:</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{Name: &#34;Max&#34;}
+	phrase := bot.GeneratePhrase()
+	go bot.Say(phrase)
+	// below is imaginary code dealing with real users
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Now it&rsquo;s clear, why our bot was blocking while saying its phrase. To fix this we should wrap <code>bot.Say(bot.GeneratePhrase())</code> statement with anonymous goroutine.</p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight go language-go">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-go"><code class="go">func main() {
+	bot := &amp;ChatBot{Name: &#34;Max&#34;}
+	go func() {
+		bot.Say(bot.GeneratePhrase())
+	}()
+	// below is imaginary code dealing with real users
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Conclusion: it&rsquo;s very tempting to prefix a single line method with the <code>go</code> keyword to make it async, however in that case we should pay attention to its parameters and watch how its arguments are populated. On the other hand we could avoid this bug from the beginning if wrapping the method with anonymous goroutine.</p>
               
             </div>
           </div>
@@ -376,8 +597,6 @@ Switched to a new branch 'gcase'
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io/tags/git/">git</a>
-
   <a class="tag tag--primary tag--small" href="https://vbauerster.github.io/tags/go/">go</a>
 
                   </div>
@@ -391,7 +610,7 @@ Switched to a new branch 'gcase'
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/" data-tooltip="Removing item(s) from a slice, while iterating in Go">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -399,7 +618,7 @@ Switched to a new branch 'gcase'
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/" data-tooltip="Безболезненное разрешение Merge конфликтов в Git">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/" data-tooltip="Removing item(s) from a slice, while iterating in Go">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -417,13 +636,13 @@ Switched to a new branch 'gcase'
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -471,7 +690,7 @@ Switched to a new branch 'gcase'
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/" data-tooltip="Removing item(s) from a slice, while iterating in Go">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -479,7 +698,7 @@ Switched to a new branch 'gcase'
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/" data-tooltip="Безболезненное разрешение Merge конфликтов в Git">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/" data-tooltip="Removing item(s) from a slice, while iterating in Go">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -497,13 +716,13 @@ Switched to a new branch 'gcase'
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -533,13 +752,13 @@ Switched to a new branch 'gcase'
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fvbauerster.github.io%2F2017%2F04%2Fbetter-pull-requesting-into-go-project%2F">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fvbauerster.github.io%2F2019%2F11%2Fis-go-keyword-always-non-blocking%2F">
           <i class="fa fa-twitter"></i><span>Share on Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fvbauerster.github.io%2F2017%2F04%2Fbetter-pull-requesting-into-go-project%2F">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fvbauerster.github.io%2F2019%2F11%2Fis-go-keyword-always-non-blocking%2F">
           <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
         </a>
       </li>
@@ -636,9 +855,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/vbauerster.github.io\/2017\/04\/better-pull-requesting-into-go-project\/';
+          this.page.url = 'https:\/\/vbauerster.github.io\/2019\/11\/is-go-keyword-always-non-blocking\/';
           
-            this.page.identifier = '\/2017\/04\/better-pull-requesting-into-go-project\/'
+            this.page.identifier = '\/2019\/11\/is-go-keyword-always-non-blocking\/'
           
         };
         (function() {

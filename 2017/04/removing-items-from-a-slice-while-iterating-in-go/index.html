@@ -1,65 +1,84 @@
-
-
-  
-    
-  
-
-
-  
-
-
-
-
-
-  
-
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
     
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Hugo 0.53 with theme Tranquilpeak 0.4.3-BETA">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Vladimir Bauer">
+<meta name="keywords" content="golang, slice">
+<meta name="description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
+It seems to be a trivial task, so lets see how to accomplish this in Go
+programming language.">
+
+
+<meta property="og:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
+It seems to be a trivial task, so lets see how to accomplish this in Go
+programming language.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Removing item(s) from a slice, while iterating in Go">
+<meta name="twitter:title" content="Removing item(s) from a slice, while iterating in Go">
+<meta property="og:url" content="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+<meta property="twitter:url" content="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
+<meta property="og:site_name" content="Do not limit yourself because you already “know”">
+<meta property="og:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
+It seems to be a trivial task, so lets see how to accomplish this in Go
+programming language.">
+<meta name="twitter:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
+It seems to be a trivial task, so lets see how to accomplish this in Go
+programming language.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2017-04-16T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2017-04-16T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="programming">
+    
+  
+  
+    
+      <meta property="article:tag" content="go">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@vbauerster">
+
+
+  <meta name="twitter:creator" content="@vbauerster">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/2206533">
+  <meta property="twitter:image" content="https://avatars1.githubusercontent.com/u/2206533">
+
+
     <title>Removing item(s) from a slice, while iterating in Go</title>
-    <meta name="author" content="Vladimir Bauer">
-    <meta name="keywords" content="development">
 
     <link rel="icon" href="https://vbauerster.github.io/favicon.png">
     
 
     
-    <meta name="description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
-It seems to be a trivial task, so lets see how to accomplish this in Go
-programming language.">
-    <meta property="og:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
-It seems to be a trivial task, so lets see how to accomplish this in Go
-programming language.">
-    <meta property="og:type" content="blog">
-    <meta property="og:title" content="Removing item(s) from a slice, while iterating in Go">
-    <meta property="og:url" content="/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
-    <meta property="og:site_name" content="YA blog">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="YA blog">
-    <meta name="twitter:description" content="How easy would it be to remove item(s) from a slice, while iterating that slice?
-It seems to be a trivial task, so lets see how to accomplish this in Go
-programming language.">
-    
-      <meta name="twitter:creator" content="@vbauerster">
-    
+      <link rel="publisher" href="https://plus.google.com/&#43;vbauerster">
     
 
-    
-    
-
-    
-      <meta property="og:image" content="https://avatars1.githubusercontent.com/u/2206533">
-    
-
-    
-    
-    
-
-    
+    <link rel="canonical" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -67,7 +86,7 @@ programming language.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://vbauerster.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
+    <link rel="stylesheet" href="https://vbauerster.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
     
     
 
@@ -95,7 +114,7 @@ if (!doNotTrack) {
       <header id="header" data-behavior="5">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://vbauerster.github.io/">YA blog</a>
+    <a class="header-title-link" href="https://vbauerster.github.io/">Do not limit yourself because you already “know”</a>
   </div>
   
     
@@ -215,6 +234,16 @@ if (!doNotTrack) {
     </a>
   </li>
 
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.paypal.me/vbauerster" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-paypal"></i>
+      
+      <span class="sidebar-button-desc">Donate</span>
+    </a>
+  </li>
+
 
     </ul>
   </div>
@@ -254,7 +283,7 @@ if (!doNotTrack) {
   
     <span>in</span>
     
-      <a class="category-link" href="https://vbauerster.github.io/categories/development">development</a>
+      <a class="category-link" href="https://vbauerster.github.io/categories/programming">programming</a>
     
   
 
@@ -677,20 +706,20 @@ Bearing that in mind we can optimize to something like this:</p>
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io/tags/golang/">golang</a>
+  <a class="tag tag--primary tag--small" href="https://vbauerster.github.io/tags/go/">go</a>
 
                   </div>
                 
               
             
-            
-  <div class="post-actions-wrap">
+            <div class="post-actions-wrap">
+  
       <nav >
         <ul class="post-actions post-action-nav">
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--disabled">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/" data-tooltip="Is go keyword always non-blocking?">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -743,8 +772,8 @@ Bearing that in mind we can optimize to something like this:</p>
         </a>
       </li>
     </ul>
-  </div>
-
+  
+</div>
 
             
               
@@ -763,14 +792,14 @@ Bearing that in mind we can optimize to something like this:</p>
 
       </div>
       <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-  <div class="post-actions-wrap">
+        <div class="post-actions-wrap">
+  
       <nav >
         <ul class="post-actions post-action-nav">
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--disabled">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://vbauerster.github.io/2019/11/is-go-keyword-always-non-blocking/" data-tooltip="Is go keyword always non-blocking?">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -823,8 +852,8 @@ Bearing that in mind we can optimize to something like this:</p>
         </a>
       </li>
     </ul>
-  </div>
-
+  
+</div>
 
       </div>
       <div id="share-options-bar" class="share-options-bar" data-behavior="5">
@@ -864,7 +893,7 @@ Bearing that in mind we can optimize to something like this:</p>
       <div id="about-card-job">
         <i class="fa fa-briefcase"></i>
         <br/>
-        Software Developer, mostly intrested in Go
+        Intrested in Rust, Go
       </div>
     
     
@@ -877,94 +906,14 @@ Bearing that in mind we can optimize to something like this:</p>
   </div>
 </div>
 
-    <div id="algolia-search-modal" class="modal-container">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="close-button"><i class="fa fa-close"></i></span>
-      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
-        <span class="searchby-algolia-text text-color-light text-small">by</span>
-        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
-      </a>
-      <i class="search-icon fa fa-search"></i>
-      <form id="algolia-search-form">
-        <input type="text" id="algolia-search-input" name="search"
-          class="form-control input--large search-input" placeholder="Search" />
-      </form>
-    </div>
-    <div class="modal-body">
-      <div class="no-result text-color-light text-center">no post found</div>
-      <div class="results">
-        
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://vbauerster.github.io/2017/04/removing-items-from-a-slice-while-iterating-in-go/">
-                <h3 class="media-heading">Removing item(s) from a slice, while iterating in Go</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2017
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>How easy would it be to remove item(s) from a slice, while iterating that slice?
-It seems to be a trivial task, so lets see how to accomplish this in Go
-programming language.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://vbauerster.github.io/2017/04/better-pull-requesting-into-go-project/">
-                <h3 class="media-heading">Better pull requesting into Go project</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2017
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>Once upon a time, I&rsquo;ve decided to contribute to an <a href="https://github.com/monochromegane/the_platinum_searcher">open source project</a> written in <a href="https://golang.org/">Go</a>. I thought no problem, fork it, make a change then pull request. Sounds good, but it wasn&rsquo;t such a smooth experience.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://vbauerster.github.io/2017/04/%D0%B1%D0%B5%D0%B7%D0%B1%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D0%B7%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5-merge-%D0%BA%D0%BE%D0%BD%D1%84%D0%BB%D0%B8%D0%BA%D1%82%D0%BE%D0%B2-%D0%B2-git/">
-                <h3 class="media-heading">Безболезненное разрешение Merge конфликтов в Git</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2017
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>Мой вольный перевод статьи <a href="http://blog.wuwon.id.au/2010/09/painless-merge-conflict-resolution-in.html">Painless merge conflict resolution in Git</a>.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-      </div>
-    </div>
-    <div class="modal-footer">
-      <p class="results-count text-medium"
-         data-message-zero="no post found"
-         data-message-one="1 post found"
-         data-message-other="{n} posts found">
-         3 posts found
-      </p>
-    </div>
-  </div>
-</div>
+    
+
     
   
     
-    <div id="cover" style="background-image:url('https://vbauerster.github.io/images/mycover.jpg');"></div>
+      
+      <div id="cover" style="background-image:url('https://vbauerster.github.io/images/mycover.jpg');"></div>
+    
   
 
 
@@ -976,13 +925,27 @@ programming language.</p></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://vbauerster.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://vbauerster.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
 
 
   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/go.min.js"></script>
   
 
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
 
 <script>
 $(document).ready(function() {
@@ -1022,6 +985,7 @@ $(document).ready(function() {
       </script>
     
   
+
 
 
 
